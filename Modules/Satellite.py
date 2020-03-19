@@ -2,6 +2,7 @@ import pygame as pg
 import os
 import sys
 import random
+import math
 
 
 class Satellite(pg.sprite.Sprite):
