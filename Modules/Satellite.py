@@ -4,21 +4,27 @@ import sys
 import random
 import math
 
+BLACK = (  0,   0,   0)
+WHITE = (255, 255, 255)
+RED   = (255,   0,   0)
+GREEN = (0,255,0)
+LT_BLUE = (173,216,230)
+
 
 class Satellite(pg.sprite.Sprite):
 
 
-    def __init__(self,screen):
+    def __init__(self,background):
 
         super().__init__()
-        self.screen = screen
-        self.sat_image = pg.image.load("Images/Satellite.png").convert()
+        self.background = background
+        self.sat_image = pg.transform.scale(pg.image.load("Images/Satellite.png").convert(),(40,40))
         self.sat_burn = pg.image.load("Images/Burn_Sat.png").convert()
         self.image = self.sat_image
         
         self.rect = self.sat_image.get_rect()
-        self.screen_rect = screen.get_rect()
-        
+       # self.screen_rect = screen.get_rect()
+        self.image.set_colorkey(BLACK) #sets transparent color        
        
 
         self.x = random.randrange(315,425)
@@ -27,7 +33,7 @@ class Satellite(pg.sprite.Sprite):
         self.dy = 0
 
         self.heading = 0
-        self.fuel = 0
+        self.fuel = 100
         self.mass = 1
         self.distance = 0
         self.thrust = pg.mixer.Sound('Sound/Thrust_sound.wav')
@@ -73,14 +79,14 @@ class Satellite(pg.sprite.Sprite):
 
     def rotate(self):
         """Rotate the satellte using degress so dish faces planet"""
-        self.image = pg.transform.rotate(self.image_sat,self.heading)
+        self.image = pg.transform.rotate(self.sat_image,self.heading)
         self.rect =self.image.get_rect()
 
     def path(self):
         """Update the satellite position and draw line to trace orbital path"""
         last_center = (self.x,self.y)
-        self.x += dx
-        self.y += dy
+        self.x += self.dx
+        self.y += self.dy
         pg.draw.line(self.background,WHITE,last_center,(self.x,self.y))
 
     def update(self):
